@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option java_package = "desidev.api.purchase";
+option java_multiple_files = true;
+option java_outer_classname = "PurchaseVerificationProto";
+
+package desidev.service.purchase;
+
+service PurchaseService {
+  rpc ConsumePurchase(ConsumePurchaseRequest) returns (ConsumePurchaseResponse);
+}
+
+message ConsumePurchaseRequest {
+  string package_name = 1;
+  string product_id = 2;
+  string purchase_token = 3;
+}
+
+message ConsumePurchaseResponse {
+  bool is_consumed = 1;
+}

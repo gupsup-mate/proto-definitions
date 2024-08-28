@@ -1,0 +1,52 @@
+
+syntax = "proto3";
+package desidev.service.account_service;
+
+import "google/protobuf/empty.proto";
+
+message Model { 
+  string name = 1;
+}
+
+message GetSelfResponse {
+  UserAccount user_account = 1;
+}
+
+message UserAccount { 
+  string username = 1;
+  string email = 2;
+  string bio = 3;
+  repeated AccountRole role = 4;
+
+  enum AccountRole { 
+    ADMIN = 0;
+    USER = 1;
+    MODEL = 2;
+  }
+}
+
+
+message GetBalanceResponse { 
+  int32 tokens_count = 1;
+  // other fields for different objects such as diamonds, silver etc... 
+}
+
+message UpdateSelfRequest {
+  string full_name = 1;
+}
+
+// Service to get the information about their accounts
+// and to update their information.
+service AccountService {
+  rpc GetSelf(google.protobuf.Empty) returns (GetSelfResponse);
+  rpc GetBalance(google.protobuf.Empty) returns (GetBalanceResponse);
+  rpc UpdateSelf(UpdateSelfRequest) returns (google.protobuf.Empty);
+}
+
+
+
+
+
+
+
+

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+option java_package = "desidev.api.auth";
+option java_multiple_files = true;
+package desidev.service.auth;
+
+import "google/protobuf/timestamp.proto";
+
+service AuthService {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+  rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse);
+}
+
+enum MsgGender { 
+  Male = 0; 
+  Female = 1;
+  Other = 2;
+}
+
+// Messages for Register RPC
+message RegisterRequest {
+  string username = 1;
+  string email = 3;
+  string password = 2;
+  string full_name = 4;
+  MsgGender gender = 5;
+  google.protobuf.Timestamp birth_date = 6;
+}
+
+message RegisterResponse {
+  bool success = 1;
+  string temp_token = 2;
+  string message = 3; // Optional error message if success is false
+}
+
+// Messages for Login RPC
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2; 
+  string token = 3;
+}
+
+// Messages for VerifyOTP RPC
+message VerifyOTPRequest {
+  string temp_token = 1;
+  string otp = 2;
+}
+
+message VerifyOTPResponse {
+  bool success = 1;
+  string message = 2; // Optional error message if success is false
+  string login_token = 3; // JWT token if successful
+}
