@@ -1,9 +1,6 @@
 syntax = "proto3";
 
-option java_package = "desidev.api.purchase";
 option java_multiple_files = true;
-option java_outer_classname = "PurchaseVerificationProto";
-
 package desidev.service.purchase;
 
 service PurchaseService {
