@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package user;
+
+import "google/protobuf/timestamp.proto";
+
+// User Role Enum
+enum UserRole {
+  UNSPECIFIED = 0;
+  ADMIN = 1;
+  MODEL = 2;
+  CONSUMER = 3;
+}
+
+// User Model
+message User {
+  string id = 1;
+  string email = 2;
+  string username = 3;
+  string full_name = 4;
+  google.protobuf.Timestamp birthdate = 5;
+  UserRole user_role = 6;
+
+  // Fields specific to model/creator users
+  optional string description = 7;
+  optional int32 likes_count = 8;
+  optional int32 fav_count = 9;
+}

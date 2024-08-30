@@ -1,8 +1,17 @@
-
 syntax = "proto3";
 package desidev.service.account_service;
 
 import "google/protobuf/empty.proto";
+
+
+// Service to get the information about their accounts
+// and to update their information.
+service AccountService {
+  rpc GetSelf(google.protobuf.Empty) returns (GetSelfResponse);
+  rpc GetBalance(google.protobuf.Empty) returns (GetBalanceResponse);
+  rpc UpdateSelf(UpdateSelfRequest) returns (google.protobuf.Empty);
+}
+
 
 message Model { 
   string name = 1;
@@ -35,18 +44,5 @@ message UpdateSelfRequest {
   string full_name = 1;
 }
 
-// Service to get the information about their accounts
-// and to update their information.
-service AccountService {
-  rpc GetSelf(google.protobuf.Empty) returns (GetSelfResponse);
-  rpc GetBalance(google.protobuf.Empty) returns (GetBalanceResponse);
-  rpc UpdateSelf(UpdateSelfRequest) returns (google.protobuf.Empty);
-}
-
-
-
-
-
-
-
+// ForgotPasswordService and related messages have been moved to auth.proto
 

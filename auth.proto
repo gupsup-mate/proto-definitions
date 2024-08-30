@@ -1,58 +1,141 @@
 syntax = "proto3";
 
-option java_multiple_files = true;
-package desidev.service.auth;
+package auth;
 
 import "google/protobuf/timestamp.proto";
+import "proto-definitions/user.proto";
 
 service AuthService {
-  rpc Register (RegisterRequest) returns (RegisterResponse);
+  // Account Creation
+  rpc InitiateAccountCreation(InitiateAccountCreationRequest) returns (InitiateAccountCreationResponse);
+  rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse);
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
+
+  // Login
   rpc Login(LoginRequest) returns (LoginResponse);
-  rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse);
+  rpc VerifyLoginOTP(VerifyLoginOTPRequest) returns (VerifyLoginOTPResponse);
+
+  // Password Reset
+  rpc InitiatePasswordReset(InitiatePasswordResetRequest) returns (InitiatePasswordResetResponse);
+  rpc VerifyPasswordResetOTP(VerifyPasswordResetOTPRequest) returns (VerifyPasswordResetOTPResponse);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
 }
 
-enum MsgGender { 
-  Male = 0; 
-  Female = 1;
-  Other = 2;
+// Account Creation Messages
+message InitiateAccountCreationRequest {
+  string email_or_username = 1;
 }
 
-// Messages for Register RPC
-message RegisterRequest {
-  string username = 1;
-  string email = 3;
-  string password = 2;
-  string full_name = 4;
-  MsgGender gender = 5;
-  google.protobuf.Timestamp birth_date = 6;
-}
-
-message RegisterResponse {
+message InitiateAccountCreationResponse {
   bool success = 1;
-  string temp_token = 2;
-  string message = 3; // Optional error message if success is false
+  string message = 2;
 }
 
-// Messages for Login RPC
-message LoginRequest {
-  string username = 1;
-  string password = 2;
-}
-
-message LoginResponse {
-  bool success = 1;
-  string message = 2; 
-  string token = 3;
-}
-
-// Messages for VerifyOTP RPC
 message VerifyOTPRequest {
-  string temp_token = 1;
+  string email_or_username = 1;
   string otp = 2;
 }
 
 message VerifyOTPResponse {
   bool success = 1;
-  string message = 2; // Optional error message if success is false
-  string login_token = 3; // JWT token if successful
+  string message = 2;
+  string temporary_token = 3;
+}
+
+// Update CreateAccountRequest to include new fields
+message CreateAccountRequest {
+  string temporary_token = 1;
+  string email = 2;
+  string username = 3;
+  string password = 4;
+  string full_name = 5;
+  google.protobuf.Timestamp birthdate = 6;
+  user.UserRole user_role = 7;
+  optional string description = 8; // Only for MODEL role
+}
+
+message CreateAccountResponse {
+  bool success = 1;
+  string message = 2;
+  string session_token = 3;
+  user.User user = 4;
+}
+
+// Login Messages
+message LoginRequest {
+  string email_or_username = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  string session_token = 3;
+  bool two_factor_required = 4;
+  user.User user = 5;
+}
+
+message VerifyLoginOTPRequest {
+  string email_or_username = 1;
+  string otp = 2;
+}
+
+message VerifyLoginOTPResponse {
+  bool success = 1;
+  string message = 2;
+  string session_token = 3;
+}
+
+// Password Reset Messages
+message InitiatePasswordResetRequest {
+  string email_or_username = 1;
+}
+
+message InitiatePasswordResetResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message VerifyPasswordResetOTPRequest {
+  string email_or_username = 1;
+  string otp = 2;
+}
+
+message VerifyPasswordResetOTPResponse {
+  bool success = 1;
+  string message = 2;
+  string reset_token = 3;
+}
+
+message ResetPasswordRequest {
+  string reset_token = 1;
+  string new_password = 2;
+}
+
+message ResetPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// User Role Enum
+enum UserRole {
+  UNSPECIFIED = 0;
+  ADMIN = 1;
+  MODEL = 2;
+  CONSUMER = 3;
+}
+
+// User Model
+message User {
+  string id = 1;
+  string email = 2;
+  string username = 3;
+  string full_name = 4;
+  google.protobuf.Timestamp birthdate = 5;
+  UserRole user_role = 6;
+
+  // Fields specific to model/creator users
+  optional string description = 7;
+  optional int32 likes_count = 8;
+  optional int32 fav_count = 9;
 }
