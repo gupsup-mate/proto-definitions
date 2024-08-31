@@ -1,4 +1,4 @@
-# Auth Service methods
+# Auth Service Methods
 
 This folder contains the proto definitions for the services in the project.
 
@@ -13,68 +13,127 @@ This service handles user authentication and authorization. It provides endpoint
 - Password reset
 - OTP verification
 
+Each flow such as login, account creation, etc. goes through multiple gRPC calls.
+Each call generates a new token with specific permissions.
+
 ### New Account Creation Flow
 
-1. User initiates account creation with email or username (InitiateAccountCreationRequest)
-2. Server generates and sends OTP to user's email
-3. User submits OTP for verification (VerifyOTPRequest)
-4. Server verifies OTP, returns temporary token (VerifyOTPResponse)
-5. User submits account details with temporary token (CreateAccountRequest)
-   - Includes email, username, and other required fields
-6. Server creates account, returns session token and user info (CreateAccountResponse)
+AuthService provides the following methods to create a new account:
 
-Note: CreateAccountResponse includes a session token for accessing other services.
+1. InitiateAccountCreation
+2. VerifyOtp
+3. CreateAccount
+
+Creating an account has the following steps:
+
+1. Client calls the `InitiateAccountCreation` method with the email. 
+   Response: OTP sent to email, token with no permissions.
+   
+   Token structure:
+   ```json
+   {
+      "permissions": [],
+      "requested_permissions": ["CreateAccount"]
+   }
+   ```
+
+2. Client calls the `VerifyOtp` method with the OTP.
+   Response: New token with `CreateAccount` permission.
+   
+   Token structure:
+   ```json
+   {
+      "permissions": ["CreateAccount"],
+      "requested_permissions": []
+   }
+   ```
+
+3. Client calls the `CreateAccount` method with account details.
+   Response: Session token for accessing other services.
+   
+   Token structure:
+   ```json
+   {
+      "permissions": ["*"],
+      "requested_permissions": []
+   }
+   ```
 
 ### Login Flow
 
-1. User submits login credentials (LoginRequest)
-   - Email or username, and password
-2. Server validates credentials
-3. If valid:
-   - Server generates session token
-   - Server returns session token and user info (LoginResponse)
-4. If invalid:
-   - Server returns error message (LoginResponse)
+AuthService provides the following methods for login:
 
-Optional: Two-Factor Authentication (2FA)
-If 2FA is enabled for the account:
-5. Server sends OTP to user's registered 2FA method (e.g., email, SMS)
-6. User submits OTP (VerifyLoginOTPRequest)
-7. Server verifies OTP
+1. Login
+2. VerifyOtp (for 2FA)
 
-8. If valid:
-   - Server generates session token
-   - Server returns session token and user info (VerifyLoginOTPResponse)
-9. If invalid:
-   - Server returns error message (VerifyLoginOTPResponse)
+Login steps:
 
-Note: LoginResponse or VerifyLoginOTPResponse (if 2FA enabled) includes a session token for accessing other services.
+With 2FA enabled:
+1. Client calls `Login` with email and password.
+2. Server validates credentials.
+3. Server sends OTP to user's email and responds with a token.
 
-### Forgot Password Flow
+   Token structure:
+   ```json
+   {
+      "permissions": [],
+      "requested_permissions": []
+   }
+   ```
 
-1. User initiates password reset (InitiatePasswordResetRequest)
-   - Provides email or username
-2. Server verifies account exists
-3. If account exists:
-   - Server generates and sends OTP to user's registered email
-   - Server returns success message (InitiatePasswordResetResponse)
-4. If account doesn't exist:
-   - Server returns error message (InitiatePasswordResetResponse)
+4. Client calls `VerifyOtp` with the OTP.
+   Response: Session token.
 
-5. User submits OTP for verification (VerifyPasswordResetOTPRequest)
-6. Server verifies OTP
-7. If OTP is valid:
-   - Server generates temporary reset token
-   - Server returns temporary reset token (VerifyPasswordResetOTPResponse)
-8. If OTP is invalid:
-   - Server returns error message (VerifyPasswordResetOTPResponse)
+   Token structure:
+   ```json
+   {
+      "permissions": ["*"],
+      "requested_permissions": []
+   }
+   ```
 
-9. User submits new password with temporary reset token (ResetPasswordRequest)
-10. Server verifies temporary reset token
-11. If token is valid:
-    - Server updates user's password
-    - Server returns success message (ResetPasswordResponse)
-12. If token is invalid:
-    - Server returns error message (ResetPasswordResponse)
+Without 2FA:
+1. Client calls `Login` with email and password.
+2. Server validates credentials.
+3. Server responds with a session token.
 
-Note: All temporary tokens (OTP, reset token) should have a short expiration time for security.
+### Password Reset Flow
+
+Methods for password reset:
+
+1. InitiatePasswordReset
+2. VerifyOtp
+3. ResetPassword
+
+Steps:
+
+1. Client calls `InitiatePasswordReset` with username.
+   
+   Input:
+   - `username`: Account username
+
+   Response:
+   - `success`: Boolean
+   - `message`: String
+   - `token`: String for ResetPassword method
+
+   Token structure:
+   ```json
+   {
+      "permissions": [],
+      "requested_permissions": ["ResetPassword"]
+   }
+   ```
+
+2. Client calls `VerifyOtp` with token and OTP.
+   Response: New token with `ResetPassword` permission if OTP is valid.
+
+   Token structure:
+   ```json
+   {
+      "permissions": ["ResetPassword"],
+      "requested_permissions": []
+   }
+   ```
+
+3. Client calls `ResetPassword` with token and new password.
