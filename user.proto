@@ -19,7 +19,7 @@ message User {
   string username = 3;
   string full_name = 4;
   google.protobuf.Timestamp birthdate = 5;
-  UserRole user_role = 6;
+  repeated UserRole user_role = 6;
 
   // Fields specific to model/creator users
   optional string description = 7;

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package auth;
+package desidev.service.auth;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
@@ -85,7 +85,7 @@ message VerifyLoginOTPResponse {
 
 // Password Reset Messages
 message InitiatePasswordResetRequest {
-  string email_or_username = 1;
+  string email = 1;
 }
 
 message InitiatePasswordResetResponse {
@@ -94,7 +94,7 @@ message InitiatePasswordResetResponse {
 }
 
 message VerifyPasswordResetOTPRequest {
-  string email_or_username = 1;
+  string email= 1;
   string otp = 2;
 }
 
