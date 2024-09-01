@@ -93,7 +93,7 @@ With 2FA enabled:
    ```
 
 Without 2FA:
-1. Client calls `Login` with email and password.
+1. Client calls `Login` with email and password. 
 2. Server validates credentials.
 3. Server responds with a session token.
 

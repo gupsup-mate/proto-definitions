@@ -20,9 +20,11 @@ message User {
   string full_name = 4;
   google.protobuf.Timestamp birthdate = 5;
   repeated UserRole user_role = 6;
-
+  // google.protobuf.Timestamp created_at = 7;
+  // google.protobuf.Timestamp updated_at = 8;
+  
   // Fields specific to model/creator users
-  optional string description = 7;
-  optional int32 likes_count = 8;
-  optional int32 fav_count = 9;
+  optional string description = 9;
+  optional int32 likes_count = 10;
+  optional int32 fav_count = 11;
 }
