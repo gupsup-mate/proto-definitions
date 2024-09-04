@@ -3,7 +3,7 @@ syntax = "proto3";
 package desidev.service.auth;
 
 import "google/protobuf/timestamp.proto";
-import "proto/user.proto";
+import "user.proto";
 
 service AuthService {
   // Account Creation
