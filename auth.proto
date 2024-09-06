@@ -48,7 +48,10 @@ message CreateAccountRequest {
   string full_name = 4;
   google.protobuf.Timestamp birthdate = 5;
   repeated user.UserRole user_role = 6;
-  optional string description = 7; // Only for MODEL role
+
+  // Only for MODEL role
+  optional string description = 7;
+  user.Gender gender = 8;
 }
 
 message CreateAccountResponse {
