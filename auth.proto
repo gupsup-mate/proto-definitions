@@ -37,8 +37,16 @@ message VerifyOtpRequest {
 
 message VerifyOtpResponse {
   bool success = 1;
-  string message = 2;
   string temporary_token = 3;
+  OtpErrorMsg error = 4;
+
+  enum OtpErrorMsg {
+    // expire by time or expire by all attempt used
+    Expire = 0;
+
+    // Input Otp Not matched
+    NotMatched = 1;
+  }
 }
 
 message CreateAccountRequest {
