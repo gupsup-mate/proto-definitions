@@ -38,7 +38,7 @@ message VerifyOtpRequest {
 message VerifyOtpResponse {
   bool success = 1;
   string temporary_token = 3;
-  OtpErrorMsg error = 4;
+  optional OtpErrorMsg error = 4;
 
   enum OtpErrorMsg {
     // expire by time or expire by all attempt used
