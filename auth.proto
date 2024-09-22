@@ -17,6 +17,8 @@ service AuthService {
   // Password Reset
   rpc InitiatePasswordReset(InitiatePasswordResetRequest) returns (InitiatePasswordResetResponse);
   rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+
+  rpc CheckUsername(CheckUsernameRequest) returns (CheckUsernameResponse);
 }
 
 // Account Creation Messages
@@ -102,4 +104,27 @@ message ResetPasswordRequest {
 message ResetPasswordResponse {
   bool success = 1;
   string message = 2;
+}
+
+
+// request message for checking Username Validity and Uniqueness
+message CheckUsernameRequest {
+  string username = 1;
+  string token = 2; 
+}
+
+
+message CheckUsernameResponse {
+  CheckResult result = 1;
+
+  enum CheckResult {
+    // Username is valid and unique
+    Valid = 0;
+  
+    // Username is not valid or already taken
+    Invalid = 1;
+  
+    // username is not available
+    AlreadyTaken = 2;
+  }
 }
