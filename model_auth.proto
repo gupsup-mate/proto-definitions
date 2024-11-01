@@ -1,0 +1,99 @@
+syntax = "proto3";
+package desidev.service.model_auth;
+
+import "google/protobuf/timestamp.proto";
+import "basic_types.proto";
+
+service ModelAuthService {
+  rpc InitNewAccount(InitNewAccountRequest) returns (InitNewAccountResponse);
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
+  rpc VerifyOtp(VerifyOtpRequest) returns (VerifyOtpResponse);
+  
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
+}
+
+message InitNewAccountRequest {
+  string email = 1;
+}
+
+message InitNewAccountResponse {
+  // short lived token
+  string token = 1;
+  string message = 2;
+  bool success = 3;
+}
+
+message CreateAccountRequest {
+  string token = 1;
+  string username = 2;
+  string password = 3;
+}
+
+message CreateAccountResponse {
+  string success = 1;
+  string message = 2;
+  ProfileMessage Profile = 3;
+  string token = 4;
+}
+
+message VerifyOtpRequest {
+  string token = 1;
+  string otp = 2;
+}
+
+message VerifyOtpResponse {
+  bool success = 1;
+  string message = 2;
+  string token = 3;
+  string profile = 4;
+}
+
+message UpdatePasswordRequest {
+  string token = 1;
+  string current_password = 2;
+  string new_password = 3;
+  // if true, it will discard the previous session token
+  // if false, it will keep the previous session token alive
+  bool discard_previous_session = 4;
+}
+
+message UpdatePasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ProfileMessage {
+  string username = 1;
+  string email = 2;
+  string phone = 3;
+  string birthdate = 4;
+  string gender = 9;
+  string bio = 5;
+  string profile_picture = 6;
+  string created_at = 7;
+  string updated_at = 8;
+}
+
+message UpdateProfileRequest {
+  string token = 1;
+  ProfileMessage profile = 2;
+}
+
+message UpdateProfileResponse {
+  bool success = 1;
+  string message = 2;
+  ProfileMessage updated_profile = 3;
+}
+
+message GetProfileRequest {
+  string token = 1;
+}
+
+message GetProfileResponse {
+  bool success = 1;
+  string message = 2;
+  ProfileMessage profile = 3;
+}

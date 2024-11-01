@@ -1,0 +1,38 @@
+syntax = "proto3";
+package desidev.basic_types;
+
+import "google/protobuf/timestamp.proto";
+
+message UserMessage {
+  string id = 1;
+  repeated ContactMessage contacts = 2;
+  string username = 3;
+  string full_name = 4;
+  google.protobuf.Timestamp birthdate = 5;
+  optional string profile_picture = 7;
+  Gender gender = 8;
+}
+
+message ModelMessage {
+  string id = 1;
+  repeated ContactMessage contacts = 2;
+  string username = 3;
+  string full_name = 4;
+  google.protobuf.Timestamp birthdate = 5;
+  optional string bio = 7;
+  optional string profile_picture = 8;
+  optional int64 likes = 9;
+}
+
+enum Gender {
+  Male = 0;
+  Female = 1;
+  Other = 2;
+}
+
+message ContactMessage {
+  string contact_type = 1;
+  string value = 2;
+  bool is_primary = 3;
+  bool is_verified = 4;
+}

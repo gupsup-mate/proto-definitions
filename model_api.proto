@@ -1,0 +1,62 @@
+syntax = "proto3";
+package desidev.service.model_api;
+
+import "google/protobuf/empty.proto";
+
+
+// Api exposed for users to fetch model details
+service ModelApi {
+  rpc GetModels(GetModelsRequest) returns (GetModelsResponse);
+  rpc GetFavModels(GetFavModelsRequest) returns (GetFavModelsResponse);
+
+  // like this model
+  rpc LikeModel(Model) returns (google.protobuf.Empty);
+
+  // unlike this model
+  rpc UnlikeModel(Model) returns (google.protobuf.Empty);
+
+  // favorite this model
+  rpc AddToFavorite(Model) returns (google.protobuf.Empty);
+}
+
+
+
+message Model {
+  string username = 1;
+  string full_name = 2;
+  string description = 3;
+  repeated string tags = 4;
+  string id = 5;
+  int32 fav_count = 6; // how many people like this model
+}
+
+message PagingInformations {
+  // items in the current page
+  int32 paze_size = 1;
+  // current page number
+  int32 page_index = 2;
+
+  int32 total_count = 3;
+}
+
+message GetModelsRequest {
+  // Pagination parameters
+  int32 page_size = 1;
+  int32 page_index = 2;
+}
+
+message GetModelsResponse {
+  repeated Model models = 1;
+  PagingInformations paging_info = 2;
+}
+
+message GetFavModelsRequest {
+  int32 page_size = 1;
+  int32 page_index = 2;
+}
+
+message GetFavModelsResponse {
+  repeated Model models = 1;
+  PagingInformations paging_info = 2;
+}
+
