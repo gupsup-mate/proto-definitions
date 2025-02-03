@@ -1,0 +1,16 @@
+
+syntax = "proto3";
+package gupsup.protobuf;
+
+message GetUserLikeModelEdgesRequest {
+  repeated string model_ids = 1;
+}
+
+message GetUserLikeModelEdgesResponse {
+  repeated UserLikeModelEdges edges = 1;
+}
+
+message UserLikeModelEdges {
+  string user_entity = 1;
+  string model_entity = 2;
+}
