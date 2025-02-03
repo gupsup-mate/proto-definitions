@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package cointalk.protobuf;
+
+import "google/protobuf/timestamp.proto";
+import "cointalk/protobuf/profile.proto";
+
+
+message UpdatePasswordRequest {
+  string current_password = 1;
+  string new_password = 2;
+  bool invalidatePreviousSessions = 3;
+}
+
+message UpdatePasswordResponse {
+  bool success = 1;
+  optional  Error error = 2;
+  enum Error {
+    WrongPreviousPassword = 0;
+    InvalidPasswordFormat = 1;
+  }
+}
+
+message UpdateProfileRequest {
+  string token = 1;
+  string new_name = 2;
+  string new_bio = 3;
+  string new_profile_picture = 4;
+  google.protobuf.Timestamp new_birthdate = 5;
+}
+
+message UpdateProfileResponse {
+  bool success = 1;
+  string message = 2;
+  ProfileMessage updated_profile = 3;
+}

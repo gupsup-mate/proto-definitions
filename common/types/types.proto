@@ -1,0 +1,43 @@
+syntax = "proto3";
+package common.types;
+
+enum Gender {
+  Male = 0;
+  Female = 1;
+  Other = 2;
+}
+
+message ContactMessage {
+  string contact_type = 1;
+  string value = 2;
+  bool is_primary = 3;
+  bool is_verified = 4;
+}
+
+message WalletMsg {
+  uint32 coins = 1;
+  uint32 gems = 2;
+  uint32 diamonds = 3;
+}
+
+enum VirtualCurrencyType {
+  Coin = 0;
+  Diamond = 1;
+  Gem = 2;
+}
+
+enum ModelStatus {
+  Online = 0;
+  Offline = 1;
+  Busy = 2;
+}
+
+message IntRange {
+  int32 start = 1;
+  int32 stop = 2;
+  // By default stop value is including however
+  // it can be changed to excluding stop
+  bool excluding = 3;
+}
+
+

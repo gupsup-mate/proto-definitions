@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package cointalk.protobuf;
+
+import "cointalk/protobuf/auth.proto";
+import "cointalk/protobuf/cointalk.proto";
+import "cointalk/protobuf/events.proto";
+import "common/types/calloffer.proto";
+import "google/protobuf/empty.proto";
+
+service AuthService {
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
+
+  rpc OtpChallenge(OtpChallengeRequest) returns (OtpChallengeResponse);
+  rpc ConfirmOtp(ConfirmOtpRequest) returns (ConfirmOtpResponse);
+
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+
+  rpc CheckUsername(CheckUsernameRequest) returns (CheckUsernameResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
+
+service CoinTalkService {
+  rpc SubscribeEvents(stream EventRequest ) returns (stream Event);
+  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
+
+  rpc AnswerToCallOffer(common.types.CallAnswer) returns (google.protobuf.Empty);
+    
+  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
+  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+}

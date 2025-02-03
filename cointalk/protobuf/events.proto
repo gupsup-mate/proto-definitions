@@ -1,0 +1,29 @@
+
+syntax = "proto3";
+package cointalk.protobuf;
+
+
+import "common/types/types.proto";
+import "google/protobuf/timestamp.proto";
+import "common/types/calloffer.proto";
+
+message EventRequest {}
+
+message Event {
+    oneof event {
+        CreditVC credit = 1;
+        common.types.CallOffer callOffer = 2;
+    }
+
+    message CreditVC {
+        string senderId = 1;
+        uint32 amount = 2;
+        common.types.VirtualCurrencyType vcType = 3;
+        google.protobuf.Timestamp timestamp = 4;
+    }
+}
+
+
+
+
+

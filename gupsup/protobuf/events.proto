@@ -1,0 +1,33 @@
+
+syntax = "proto3";
+package gupsup.protobuf;
+
+import "common/types/types.proto";
+
+message EventRequest {
+    oneof request { 
+        SubscribeModelStatus subscribeModelStatus = 1;
+    }
+    message SubscribeModelStatus {
+        // model_ids: list of model ids to subscribe
+        repeated string include_ids = 1;
+        // cancel_ids: list of model ids to cancel subscription
+        repeated string exclude_ids = 2;
+    }
+}
+
+message Event {
+    oneof event { 
+         StatusUpdate status_update = 1;
+    }
+
+    message StatusUpdate {
+        string model_id = 1;
+        common.types.ModelStatus status = 2;
+    }
+}
+
+
+
+
+

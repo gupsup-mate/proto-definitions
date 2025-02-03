@@ -1,0 +1,44 @@
+syntax = "proto3";
+package gupsup.protobuf;
+
+import "gupsup/protobuf/auth.proto";
+import "gupsup/protobuf/purchase.proto";
+import "gupsup/protobuf/events.proto";
+import "gupsup/protobuf/get_models.proto";
+import "gupsup/protobuf/send_gift.proto";
+import "google/protobuf/empty.proto";
+import "gupsup/protobuf/model.proto";
+import "gupsup/protobuf/calloffer.proto";
+import "gupsup/protobuf/get_like_status.proto";
+
+service UserAuthService {
+  rpc OtpChallenge(OtpChallengeRequest) returns (OtpChallengeResponse);
+  rpc ConfirmOtp(ConfirmOtpRequest) returns (ConfirmOtpResponse);
+
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
+
+  rpc CheckUsername(CheckUsernameRequest) returns (CheckUsernameResponse);
+  rpc Login(LoginRequest) returns (LoginResponse);
+}
+
+service UserService {
+  // Subscribe any event two way connection like websocket
+  rpc SubscribeEvents(stream EventRequest) returns (stream Event);
+
+  rpc GetModels(GetModelsRequest) returns (GetModelsResponse);
+  rpc GetLikeStatus(GetLikeStatusRequest) returns (GetLikeStatusResponse);
+
+  rpc SendCallOffer(CallOffer) returns (CallAnswer);
+
+
+  rpc SendGift(SendGiftRequest) returns (google.protobuf.Empty);
+  rpc HitLike(ModelId) returns (google.protobuf.Empty);
+  rpc Unlike(ModelId)  returns (google.protobuf.Empty);
+  rpc AddIntoFav(ModelId)  returns (google.protobuf.Empty);
+}
+
+service PurchaseService {
+  rpc VerifyPurchase(VerifyPurchaseRequest) returns (VerifyPurchaseResponse);
+  rpc ProductList(ProductListRequest) returns (ProductListResponse);
+}

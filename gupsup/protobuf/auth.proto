@@ -1,0 +1,108 @@
+syntax = "proto3";
+package gupsup.protobuf;
+
+import "google/protobuf/timestamp.proto";
+import "common/types/types.proto";
+import "gupsup/protobuf/user.proto";
+
+
+message OtpChallengeRequest {
+  string email = 1;
+  ActionPermission action = 2;
+
+  enum ActionPermission {
+    Register = 0;
+    Login = 1;
+    ResetPassword = 2;
+  }
+}
+
+message OtpChallengeResponse {
+  string challenge_token = 3;
+}
+
+message ConfirmOtpRequest {
+  string challenge_token = 1;
+  // challenge input
+  string otp = 2;
+}
+
+message ConfirmOtpResponse {
+  bool success = 1;
+  string temporary_token = 3;
+  optional OtpErrorMsg error = 4;
+
+  enum OtpErrorMsg {
+    Invalid = 0;
+    Expired = 1;
+    MaxAttempts = 2;
+  }
+}
+
+message RegisterRequest {
+  string temporary_token = 1;
+  string username = 2;
+  string password = 3;
+  string fullname = 4;
+  google.protobuf.Timestamp birthdate = 5;
+  common.types.Gender gender = 8;
+  string country = 9;
+}
+
+message RegisterResponse {
+  string session_token = 3;
+  UserProfileMsg user = 4;
+}
+
+message LoginRequest {
+  oneof loginBy { 
+    string email = 1;
+    string username = 2;
+  }
+  string password = 3;
+}
+
+message LoginResponse {
+  string session_token = 3;
+  UserProfileMsg user = 4;
+}
+
+message InitiatePasswordResetRequest {
+  string username = 1;
+}
+
+message InitiatePasswordResetResponse {
+  bool success = 1;
+  string message = 2;
+  string reset_token = 3;
+}
+
+message ResetPasswordRequest {
+  string reset_token = 1;
+  string new_password = 2;
+}
+
+message ResetPasswordResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message CheckUsernameRequest {
+  string username = 1;
+  string token = 2;
+}
+
+message CheckUsernameResponse {
+  CheckResult result = 1;
+
+  enum CheckResult {
+    // Username is valid and unique
+    Valid = 0;
+
+    // Username is not valid or already taken
+    Invalid = 1;
+
+    // username is not available
+    AlreadyTaken = 2;
+  }
+}

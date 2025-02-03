@@ -1,0 +1,20 @@
+
+syntax="proto3";
+package gupsup.protobuf;
+
+message Model {
+    string id = 1;
+    string username = 2;
+    string fullname = 3;
+    string gender = 4;
+    int32 age = 5;
+    int32 likes = 6;
+    string bio = 7;
+    string status = 8;
+    string country = 9;
+    string profilePic = 10;
+}
+
+message ModelId { string id = 1; }
+
+

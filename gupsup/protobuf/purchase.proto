@@ -1,0 +1,28 @@
+
+syntax = "proto3";
+package gupsup.protobuf;
+
+import "common/types/types.proto";
+
+message VerifyPurchaseRequest {
+  string package_name = 1;
+  string product_id = 2;
+  string purchase_token = 3;
+}
+
+message VerifyPurchaseResponse {
+  bool success = 1;
+  common.types.WalletMsg updated_wallet = 2;
+}
+
+message ProductListRequest {
+  string package_id = 1;
+}
+
+message ProductListResponse {
+  repeated Product products = 1;
+}
+
+message Product {
+  string product_id= 1;
+}

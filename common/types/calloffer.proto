@@ -1,0 +1,38 @@
+syntax = "proto3";
+package common.types;
+
+message CallOffer {
+  string senderId = 1;
+  string receiverId = 2;
+  uint32 coinsPerMinute = 3;
+  uint64 timestamp = 4;
+  SessionDescription sessionDescription = 5;
+}
+
+message CallAnswer {
+  string senderId = 1;
+  string receiverId = 2;
+  uint64 timestamp = 3;
+
+  oneof answer {
+    Accept accept = 4;
+    Reject reject = 5;
+  }
+
+  message Accept {
+    SessionDescription sessionDescription = 6;
+  }
+
+  message Reject {
+    string reason = 7;
+    enum Reason {
+      UNKNOWN = 0;
+      BUSY = 1;
+      NOT_AVAILABLE = 3;
+      REJECTED = 4;
+    }
+  }
+}
+
+message SessionDescription {
+}
