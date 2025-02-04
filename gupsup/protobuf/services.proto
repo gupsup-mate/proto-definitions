@@ -9,7 +9,7 @@ import "gupsup/protobuf/send_gift.proto";
 import "google/protobuf/empty.proto";
 import "gupsup/protobuf/model.proto";
 import "gupsup/protobuf/calloffer.proto";
-import "gupsup/protobuf/get_user_like_model_edges.proto";
+import "gupsup/protobuf/get_fav_models.proto";
 
 service UserAuthService {
   rpc OtpChallenge(OtpChallengeRequest) returns (OtpChallengeResponse);
@@ -27,9 +27,7 @@ service UserService {
   rpc SubscribeEvents(stream EventRequest) returns (stream Event);
 
   rpc GetModels(GetModelsRequest) returns (GetModelsResponse);
-  
-  rpc GetUserLikeModelEdges(GetUserLikeModelEdgesRequest) returns (GetUserLikeModelEdgesResponse);
-  rpc getUserFavModelEdges(GetUserFavModelEdges) returns(GetUserFavModelEdges);
+  rpc GetFavModels(google.protobuf.Empty) returns (GetFavModelsResponse);
 
   rpc SendCallOffer(CallOffer) returns (CallAnswer);
 

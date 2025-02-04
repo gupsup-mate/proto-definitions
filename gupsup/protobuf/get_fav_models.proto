@@ -1,0 +1,9 @@
+syntax = "proto3";
+package gupsup.protobuf;
+
+import "common/types/types.proto";
+import "gupsup/protobuf/model.proto";
+
+message GetFavModelsResponse {
+  repeated Model models = 6;
+}
