@@ -27,18 +27,35 @@ service UserService {
   rpc SubscribeEvents(stream EventRequest) returns (stream Event);
 
   rpc GetModels(GetModelsRequest) returns (GetModelsResponse);
-  rpc GetFavModels(google.protobuf.Empty) returns (GetFavModelsResponse);
+  rpc GetModelById(ModelId) returns (Model);
+
+  rpc GetLikeStatusForModelById(ModelId) returns (LikeStatusResponse);
+
+  rpc GetAllFavModelIds(google.protobuf.Empty) returns (GetAllFavModelIdsResponse);
 
   rpc SendCallOffer(CallOffer) returns (CallAnswer);
-
-
   rpc SendGift(SendGiftRequest) returns (google.protobuf.Empty);
-  rpc HitLike(ModelId) returns (google.protobuf.Empty);
-  rpc Unlike(ModelId)  returns (google.protobuf.Empty);
-  rpc AddIntoFav(ModelId)  returns (google.protobuf.Empty);
+
+  rpc UpdateLike(UpdateLikeRequest) returns (google.protobuf.Empty);
+  rpc UpdateFav(UpdateFavRequest)  returns (google.protobuf.Empty);
 }
 
 service PurchaseService {
   rpc VerifyPurchase(VerifyPurchaseRequest) returns (VerifyPurchaseResponse);
   rpc ProductList(ProductListRequest) returns (ProductListResponse);
+}
+
+message UpdateFavRequest {
+  string modelId = 1;
+  bool isFav = 2;
+}
+
+message UpdateLikeRequest {string modelId = 1; bool isLiked = 2;}
+
+message GetAllFavModelIdsResponse{
+  repeated string modelIds = 1;
+}
+
+message LikeStatusResponse {
+  bool isLiked = 1;
 }
