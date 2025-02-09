@@ -10,9 +10,8 @@ message Model {
     int32 age = 5;
     int32 likes = 6;
     string bio = 7;
-    string status = 8;
-    string country = 9;
-    string profilePic = 10;
+    string country = 8;
+    string profilePic = 9;
 }
 
 message ModelId { string id = 1; }
