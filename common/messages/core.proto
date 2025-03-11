@@ -1,0 +1,62 @@
+syntax = "proto3";
+package common.messages;
+
+import "google/protobuf/timestamp.proto";
+
+// ----------------------------------------------
+// Basic Type Definitions
+// ----------------------------------------------
+
+// Gender enum definition
+enum GenderMessage {
+  MALE = 0;
+  FEMALE = 1;
+  OTHER = 2;
+}
+
+// Wallet message definition
+message WalletMsg {
+  uint32 coins = 1;
+  uint32 gems = 2;
+  uint32 diamonds = 3;
+}
+
+// VirtualCurrencyType enum
+enum VirtualCurrencyType {
+  COIN = 0;
+  DIAMOND = 1;
+  GEM = 2;
+}
+
+// Model status enum
+enum ModelStatus {
+  ONLINE = 0;
+  OFFLINE = 1;
+  BUSY = 2;
+}
+
+// IntRange for pagination or other range-based operations
+message IntRange {
+  int32 start = 1;
+  int32 stop = 2;
+  // By default stop value is including however
+  // it can be changed to excluding stop
+  bool excluding = 3;
+}
+
+
+// Contact message definition
+message ContactMessage {
+  ContactTypeMsg contact_type = 1;
+  string value = 2;
+  bool is_primary = 3;
+  google.protobuf.Timestamp verified_at = 4;
+
+  enum ContactTypeMsg {
+    EMAIL = 0;
+    PHONE = 1;
+  }
+}
+
+
+

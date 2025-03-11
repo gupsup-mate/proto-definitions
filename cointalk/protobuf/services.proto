@@ -2,31 +2,17 @@ syntax = "proto3";
 
 package cointalk.protobuf;
 
-import "cointalk/protobuf/auth.proto";
-import "cointalk/protobuf/cointalk.proto";
+// Import common types
+import "common/messages/core.proto";
+import "common/messages/call.proto";
+import "common/messages/twilio.proto";
+
+// Import service-specific proto files
 import "cointalk/protobuf/events.proto";
-import "common/types/calloffer.proto";
+import "cointalk/protobuf/cointalk.proto";
 import "google/protobuf/empty.proto";
 
-service AuthService {
-  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
-
-  rpc OtpChallenge(OtpChallengeRequest) returns (OtpChallengeResponse);
-  rpc ConfirmOtp(ConfirmOtpRequest) returns (ConfirmOtpResponse);
-
-  rpc Register(RegisterRequest) returns (RegisterResponse);
-  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
-
-  rpc CheckUsername(CheckUsernameRequest) returns (CheckUsernameResponse);
-  rpc Login(LoginRequest) returns (LoginResponse);
-}
-
 service CoinTalkService {
-  rpc SubscribeEvents(stream EventRequest ) returns (stream Event);
-  rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
-
-  rpc AnswerToCallOffer(common.types.CallAnswer) returns (google.protobuf.Empty);
-    
-  rpc UpdateProfile(UpdateProfileRequest) returns (UpdateProfileResponse);
-  rpc GetProfile(GetProfileRequest) returns (GetProfileResponse);
+  // Events subscription
+  rpc SubscribeEvents(stream EventRequest) returns (stream Event);
 }

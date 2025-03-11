@@ -1,24 +1,26 @@
-
 syntax = "proto3";
 package cointalk.protobuf;
 
-
-import "common/types/types.proto";
 import "google/protobuf/timestamp.proto";
-import "common/types/calloffer.proto";
 
-message EventRequest {}
+message EventRequest {
+    oneof request {
+        SubscribeCallEvents subscribe_call_events = 1;
+    }
+    
+    message SubscribeCallEvents {
+        // No specific parameters needed - subscribes to all call events for the current user
+    }
+}
 
 message Event {
     oneof event {
-        CreditVC credit = 1;
-        common.types.CallOffer callOffer = 2;
+        CreditVC credit = 2;  // Non-call events
     }
 
     message CreditVC {
         string senderId = 1;
         uint32 amount = 2;
-        common.types.VirtualCurrencyType vcType = 3;
         google.protobuf.Timestamp timestamp = 4;
     }
 }

@@ -1,28 +1,45 @@
-
 syntax = "proto3";
 package gupsup.protobuf;
 
-import "common/types/types.proto";
+import "google/protobuf/timestamp.proto";
+//import "common/types/core.proto";
 
 message VerifyPurchaseRequest {
-  string package_name = 1;
-  string product_id = 2;
-  string purchase_token = 3;
+  string purchase_token = 1;
+  string package_name = 2;
+  string product_id = 3;
+  string purchase_time = 4;
 }
 
 message VerifyPurchaseResponse {
-  bool success = 1;
-  common.types.WalletMsg updated_wallet = 2;
+  bool verified = 1;
+  string error_message = 2;
+  int32 received_coins = 3;
+  int32 received_gems = 4;
 }
 
 message ProductListRequest {
-  string package_id = 1;
+  string package_name = 1;
 }
 
 message ProductListResponse {
   repeated Product products = 1;
-}
-
-message Product {
-  string product_id= 1;
+  
+  message Product {
+    string id = 1;
+    string name = 2;
+    string price = 3;
+    string currency = 4;
+    string description = 5;
+    int32 coins = 6;
+    int32 gems = 7;
+    ProductType product_type = 8;
+    
+    enum ProductType {
+      UNKNOWN = 0;
+      COIN = 1;
+      GEM = 2;
+      SUBSCRIPTION = 3;
+    }
+  }
 }

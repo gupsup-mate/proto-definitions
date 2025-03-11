@@ -1,26 +1,19 @@
 syntax = "proto3";
 package gupsup.protobuf;
 
-import "gupsup/protobuf/auth.proto";
-import "gupsup/protobuf/purchase.proto";
+// Import common types
+//import "common/types/core.proto";
+//import "common/types/call.proto";
+//import "common/types/twilio.proto";
+
+// Import service-specific proto files
 import "gupsup/protobuf/events.proto";
+import "gupsup/protobuf/model.proto";
 import "gupsup/protobuf/get_models.proto";
+import "gupsup/protobuf/get_fav_models.proto";
+import "gupsup/protobuf/purchase.proto";
 import "gupsup/protobuf/send_gift.proto";
 import "google/protobuf/empty.proto";
-import "gupsup/protobuf/model.proto";
-import "gupsup/protobuf/calloffer.proto";
-import "gupsup/protobuf/get_fav_models.proto";
-
-service UserAuthService {
-  rpc OtpChallenge(OtpChallengeRequest) returns (OtpChallengeResponse);
-  rpc ConfirmOtp(ConfirmOtpRequest) returns (ConfirmOtpResponse);
-
-  rpc Register(RegisterRequest) returns (RegisterResponse);
-  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse);
-
-  rpc CheckUsername(CheckUsernameRequest) returns (CheckUsernameResponse);
-  rpc Login(LoginRequest) returns (LoginResponse);
-}
 
 service UserService {
   // Subscribe any event two way connection like websocket
@@ -33,9 +26,11 @@ service UserService {
 
   rpc GetAllFavModelIds(google.protobuf.Empty) returns (GetAllFavModelIdsResponse);
 
-  rpc SendCallOffer(CallOffer) returns (CallAnswer);
+  // Call-related methods
+//  rpc SendCallOffer(common.types.CallOffer) returns (google.protobuf.Empty);
+//  rpc JoinRandomCall(common.types.RandomCallRequest) returns (common.types.RandomCallResponse);
+  
   rpc SendGift(SendGiftRequest) returns (google.protobuf.Empty);
-
   rpc UpdateLike(UpdateLikeRequest) returns (google.protobuf.Empty);
   rpc UpdateFav(UpdateFavRequest)  returns (google.protobuf.Empty);
 }
@@ -50,11 +45,11 @@ message UpdateFavRequest {
   bool isFav = 2;
 }
 
-message UpdateLikeRequest {string modelId = 1; bool isLiked = 2;}
-
-message GetAllFavModelIdsResponse{
-  repeated string modelIds = 1;
+message UpdateLikeRequest {
+  string modelId = 1; 
+  bool isLiked = 2;
 }
+
 
 message LikeStatusResponse {
   bool isLiked = 1;

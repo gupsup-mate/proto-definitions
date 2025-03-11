@@ -1,16 +1,11 @@
-
-syntax="proto3";
+syntax = "proto3";
 package gupsup.protobuf;
 
-import "common/types/types.proto";
+import "google/protobuf/timestamp.proto";
+//import "common/types/core.proto";
 
-message SendGiftRequest { 
-    string model_id  = 1;
-
-    // possible values coin, diamond, gems etc
-    common.types.VirtualCurrencyType item_type = 2;
-    string qunatity = 3;
-
-    // could be a session id or a chat id
-    string context = 4;
+message SendGiftRequest {
+  string model_id = 1;
+  uint32 amount = 2;
+//  common.types.VirtualCurrencyType currency_type = 3;
 }

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package auth.protobuf;
+import "google/protobuf/timestamp.proto";
+import "common/messages/core.proto";
+
+message UserProfileMessage {
+  string id = 1;
+  string fullname = 2;
+  string username = 3;
+  optional string country = 4;
+  google.protobuf.Timestamp birthdate = 5;
+  optional string profile_picture = 6;
+  common.messages.GenderMessage gender = 7;
+  repeated common.messages.ContactMessage contacts = 8;
+  optional string bio = 10;
+  google.protobuf.Timestamp created_at = 11;
+  google.protobuf.Timestamp updated_at = 12;
+}

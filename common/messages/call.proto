@@ -1,0 +1,89 @@
+syntax = "proto3";
+package common.messages;
+
+// WebRTC Session Description - for negotiating media connections
+message SessionDescription {
+  string type = 1;  // Offer or answer
+  string sdp = 2;   // Session Description Protocol data
+}
+
+// Call Offer - sent from GupsUp user to CoinTalk user
+message CallOffer {
+  string sender_id = 1;        // ID of the GupsUp user 
+  string receiver_id = 2;      // ID of the CoinTalk user to call
+  uint32 coins_per_minute = 3; // Payment rate for the call
+  uint64 timestamp = 4;        // When the offer was created
+  string offer_id = 5;         // Unique ID for this call
+}
+
+// Call Answer - response to a call offer
+message CallAnswer {
+  string caller_id = 1;      // ID of the user who initiated the call
+  string receiver_id = 2;    // ID of the user receiving the call
+  uint64 timestamp = 3;      // When the answer was created
+  bool accepted = 4;         // Whether the call was accepted
+  string reason = 5;         // Reason for rejection if not accepted
+  
+  enum RejectReason {
+    NONE = 0;                // Not rejected
+    BUSY = 1;                // User is busy
+    UNAVAILABLE = 2;         // User is unavailable
+    REJECTED = 3;            // User explicitly rejected
+  }
+  
+  RejectReason reason_code = 6;
+}
+
+// Room Token - sent as an event to participants after call is accepted
+message RoomToken {
+  string room_name = 1;      // Unique room identifier 
+  string token = 2;          // Twilio JWT token
+  uint64 expires_at = 3;     // Token expiration timestamp
+  string caller_id = 4;      // ID of the caller
+  string receiver_id = 5;    // ID of the receiver
+}
+
+// Call Event - sent to notify participants about call state changes
+message CallEvent {
+  enum EventType {
+    UNKNOWN = 0;
+    CALL_OFFERED = 1;        // New incoming call
+    CALL_ACCEPTED = 2;       // Call was accepted
+    CALL_REJECTED = 3;       // Call was rejected
+    ROOM_CREATED = 4;        // Room created with tokens (carries RoomToken)
+    CALL_ENDED = 5;          // Call has ended
+  }
+  
+  EventType event_type = 1;
+  string call_id = 2;        // Unique call identifier
+  uint64 timestamp = 3;      // When the event occurred
+  
+  oneof payload {
+    CallOffer offer = 4;     // For CALL_OFFERED
+    CallAnswer answer = 5;   // For CALL_ACCEPTED, CALL_REJECTED
+    RoomToken room_token = 6; // For ROOM_CREATED
+  }
+}
+
+// Call Status Update - sent to update call status
+message CallStatusUpdate {
+  enum CallStatus {
+    UNKNOWN = 0;
+    RINGING = 1;
+    ANSWERED = 2;      // Added from twilio.proto
+    IN_PROGRESS = 3;   // Added from twilio.proto
+    CONNECTED = 4;     // Previous CONNECTED value
+    DISCONNECTED = 5;  // Previous DISCONNECTED value  
+    ENDED = 6;         // Previous ENDED value
+    REJECTED = 7;      // Added from twilio.proto
+    BUSY = 8;          // Added from twilio.proto
+    FAILED = 9;        // Added from twilio.proto
+  }
+  
+  string room_name = 1;
+  string participant_id = 2;    // Renamed from participant_identity for consistency
+  CallStatus status = 3;
+  uint64 timestamp = 4;
+  uint64 call_duration = 5;  // Duration in seconds for ENDED status
+  string reason = 6;         // Optional reason
+} 

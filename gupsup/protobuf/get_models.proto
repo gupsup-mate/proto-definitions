@@ -1,26 +1,20 @@
 syntax = "proto3";
 package gupsup.protobuf;
 
-import "common/types/types.proto";
+//import "common/types/core.proto";
 import "gupsup/protobuf/model.proto";
 
 message GetModelsRequest {
-  uint64 pageSize = 1;
-  uint64 pageIndex = 2;
-
-  message Filter {
-    string country = 1;
-    common.types.IntRange ageRange = 2;
-    repeated string tags = 3;
-  }
-
-  optional Filter filter = 3;
+  optional string last_id = 1;
+  optional int32 limit = 2;
+  optional bool favorites_only = 3;
+//  optional common.types.GenderMessage gender = 4;
+//  optional common.types.IntRange age_range = 5;
+  optional bool online_only = 6;
 }
 
 message GetModelsResponse {
-  uint64 pageIndex = 1;
-  uint64 pageSize = 2;
-  uint64 totalPages = 3;
-  uint64 totalItems = 4;
-  repeated Model models = 6;
+  repeated string model_ids = 1;
+  optional string last_id = 2;
+  bool has_more = 3;
 }

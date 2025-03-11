@@ -1,9 +1,13 @@
 syntax = "proto3";
 package gupsup.protobuf;
 
-import "common/types/types.proto";
+//import "common/types/core.proto";
 import "gupsup/protobuf/model.proto";
 
 message GetFavModelsResponse {
   repeated Model models = 6;
+}
+
+message GetAllFavModelIdsResponse {
+  repeated string model_ids = 1;
 }

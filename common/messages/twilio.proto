@@ -1,0 +1,59 @@
+syntax = "proto3";
+package common.messages;
+
+
+// Request to generate a Twilio token (internal API)
+message TwilioTokenRequest {
+  string room_name = 1;     // Room name to join
+  string user_id = 2;       // User ID requesting the token
+}
+
+// Response containing a Twilio token (internal API)
+message TwilioTokenResponse {
+  string token = 1;         // Twilio JWT token
+  uint64 expires_at = 2;    // Token expiration timestamp
+}
+
+// Request to join a random call
+message RandomCallRequest {
+  string user_id = 1;       // ID of the user requesting a random match
+  uint32 max_wait_time = 2; // Maximum wait time in seconds
+  uint32 coins_per_minute = 3; // For GupsUp users, how much to pay
+}
+
+// Response for random call matching
+message RandomCallResponse {
+  enum MatchStatus {
+    UNKNOWN = 0;
+    QUEUED = 1;             // Added to matching queue
+    MATCHED = 2;            // Match found, wait for RoomCreated event
+    TIMEOUT = 3;            // No match found within timeout 
+    ERROR = 4;              // Error occurred
+  }
+  
+  MatchStatus status = 1;
+  string match_id = 2;      // ID of the matched user (if any)
+}
+
+message TwilioCallEvent {
+  enum EventType {
+    UNKNOWN = 0;
+    ROOM_CREATED = 1;
+    PARTICIPANT_CONNECTED = 2;
+    PARTICIPANT_DISCONNECTED = 3;
+    ROOM_ENDED = 4;
+    RECORDING_STARTED = 5;
+    RECORDING_COMPLETED = 6;
+    ERROR = 7;
+  }
+
+  EventType event_type = 1;
+  string room_sid = 2;
+  string room_name = 3;
+  string participant_identity = 4; // Identity of the participant this event relates to
+  uint64 timestamp = 5;            // When the event occurred
+  string account_sid = 6;
+  map<string, string> metadata = 7; // Additional event metadata
+}
+
+// Note: CallStatusUpdate has been moved to call.proto to avoid duplication 
